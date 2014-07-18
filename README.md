@@ -40,6 +40,8 @@ coreos:
   # Optional: Specify the full URL or leave empty. Will generate a new discovery id for the cluster if empty
   discovery: https://discovery.etcd.io/8ba477fa9ddf749616eb98812269a726
 logstash:
+  # Image ID to use
+  image: afb5ee19-4e6e-42c3-841c-9663e99b83ba
   # Size of the elasticsearch data nodes
   flavor: performance1-8
   configurations:
@@ -49,6 +51,8 @@ logstash:
       - elasticsearch
       - redis_pub_sub
 elasticsearch:
+  # Image ID to use
+  image: afb5ee19-4e6e-42c3-841c-9663e99b83ba
   # Size of the elasticsearch data nodes
   flavor: performance2-15
   # Optional
