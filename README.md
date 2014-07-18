@@ -33,6 +33,8 @@ coreos:
 
 ### config.yaml
 
+* logstash.configurations - Specify a list of files in the `logstash_configurations` directory that you want added into the logstash docker container on build
+
 ```yaml
 coreos:
     # Optional: Specify the full URL or leave empty. Will generate a new discovery id for the cluster if empty
@@ -40,6 +42,12 @@ coreos:
 logstash:
     # Size of the elasticsearch data nodes
     flavor: performance1-8
+    configurations:
+        inputs:
+            - syslog
+        outputs:
+            - elasticsearch
+            - redis_pub_sub
 elasticsearch:
     # Size of the elasticsearch data nodes
     flavor: performance2-15
