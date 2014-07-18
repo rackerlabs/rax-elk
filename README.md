@@ -19,14 +19,14 @@ Rename cloud-config.yaml.sample and add settings that should exist on all nodes.
 # Example only
 users:
   - name: philkates
-    groups:
-      - sudo
-      - docker
-    coreos-ssh-import-github: philk
+  groups:
+    - sudo
+    - docker
+  coreos-ssh-import-github: philk
 
 coreos:
-    update:
-        reboot-strategy: etcd-lock
+  update:
+    reboot-strategy: etcd-lock
 
 ```
 ...etc
@@ -37,22 +37,22 @@ coreos:
 
 ```yaml
 coreos:
-    # Optional: Specify the full URL or leave empty. Will generate a new discovery id for the cluster if empty
-    discovery: https://discovery.etcd.io/8ba477fa9ddf749616eb98812269a726
+  # Optional: Specify the full URL or leave empty. Will generate a new discovery id for the cluster if empty
+  discovery: https://discovery.etcd.io/8ba477fa9ddf749616eb98812269a726
 logstash:
-    # Size of the elasticsearch data nodes
-    flavor: performance1-8
-    configurations:
-        inputs:
-            - syslog
-        outputs:
-            - elasticsearch
-            - redis_pub_sub
+  # Size of the elasticsearch data nodes
+  flavor: performance1-8
+  configurations:
+    inputs:
+      - syslog
+    outputs:
+      - elasticsearch
+      - redis_pub_sub
 elasticsearch:
-    # Size of the elasticsearch data nodes
-    flavor: performance2-15
-    # Optional
-    name: corestash
-    # How many data nodes to create
-    cluster_size: 3
+  # Size of the elasticsearch data nodes
+  flavor: performance2-15
+  # Optional
+  name: corestash
+  # How many data nodes to create
+  cluster_size: 3
 ```
