@@ -5,6 +5,8 @@ rax-elk
 
 The purpose of this repository is to allow a quick push-button setup of a minimum viable logstash cluster.
 
+Join the discussion on #elk-dev on Freenode.
+
 ## Cluster Configuration
 
 The initial cluster will be started using a bootstrap script and a config.yaml file. The config allows you to set things such as the Elasticsearch cluster size and flavors used for the nodes.
