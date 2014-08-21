@@ -14,6 +14,8 @@ coreos:
     - name: fleet.service
       command: start
       enable: yes
+    - name: docker.service
+      command: stop
     - name: docker-tcp.socket
       command: start
       enable: true
