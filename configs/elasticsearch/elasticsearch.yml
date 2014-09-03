@@ -1,0 +1,26 @@
+# This is a simplified base configuration for Elasticsearch. Rather than
+# updating the settings here it's recommended to set or override by passing
+# -Des.option.name=stuff to the end of your docker run command.
+
+cluster.name: raxelk
+node.name: ${ES_NODE_NAME}
+network.publish_host: ${ES_PUBLISH_HOST}
+discovery.zen.ping.multicast.enabled: false
+
+#################################### Paths ####################################
+
+# Path to directory containing configuration (this file and logging.yml):
+path.conf: /etc/elasticsearch
+# Path to directory where to store index data allocated for this node.
+path.data: /var/lib/elasticsearch/data
+# Path to temporary files:
+path.work: /var/lib/elasticsearch/work
+# Path to log files:
+path.logs: /var/log/elasticsearch
+# Path to where plugins are installed:
+# path.plugins: /path/to/plugins
+
+################################### Memory ####################################
+
+# Set this property to true to lock the memory:
+bootstrap.mlockall: true

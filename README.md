@@ -52,3 +52,17 @@ coreos:
 ### config.yaml
 
 Rename [config.yaml.sample](config.yaml.sample) to config.yaml and update the settings you wish to change.
+
+### Elasticsearch
+
+The Elasticsearch container is built from the files in `configs/elasticsearch`. If you're not using the [fleet units](configs/units) directly you'll need to do a couple of things in your docker run command.
+
+* `--cap-add=SYS_RESOURCE` - This allows Elasticsearch to use it's `bootstrap.mlockall` option to [lock it's memory](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/setup-configuration.html#setup-configuration-memory).
+* `--volume /data/elasticsearch:/var/lib/elasticsearch` - You probably want to save your data somewhere.
+* `--publish 9200:9200`, `--publish 9300:9300` - Inside the container elasticsearch is listening on 9200 and 9300. Set this as you want those ports exposed on your host.
+
+The environment variables `ES_HEAP_SIZE`, `ES_PUBLISH_HOST`, and `ES_NODE_NAME` can all be overridden in your docker run command as well.
+
+And finally, you can override any Elasticsearch config settings by passing them end at the end of your docker run.
+
+`docker run elasticsearch -Des.discovery.zen.ping.unicast.hosts=192.168.0.1`
