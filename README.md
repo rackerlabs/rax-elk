@@ -52,3 +52,24 @@ coreos:
 ### config.yaml
 
 Rename [config.yaml.sample](config.yaml.sample) to config.yaml and update the settings you wish to change.
+
+## Docker Containers
+
+### Logstash
+
+Inside of `configs/logstash` you'll see a conf.d directory. This directory gets added to the container during the build. In the [Dockerfile](configs/logstash/Dockerfile) you'll see that the default command tells logstash to load all *.conf files in that directory. We've included a couple of conf.sample files that can just be renamed or you can add as many custom conf files as you want. (Note: *.conf files in that path are .gitignored)
+
+The Logstash heap size can be customized by setting the `LS_HEAP_SIZE` environment variable in docker run.
+
+#### Logstash with Elasticsearch
+
+If you're using elasticsearch you'll want to set a couple of keys in etcd for the [start.sh](configs/logstash/start.sh) script. In the future these will be set automatically by the systemd units.
+
+Set list of other hosts to connect to:
+
+`etcdctl set /rax_elk/es_hosts/node0 192.168.2.5:9200`  
+`etcdctl set /rax_elk/es_hosts/node1 192.168.2.2:9200`
+
+Run the container with at least `ES_PUBLISH_HOST` set to the interface you want shared with the rest of the cluster:
+`docker run -e ES_PUBLISH_HOST=$(ifconfig eth2 |grep 'inet ' |awk '{print $2}') logstash`
+
