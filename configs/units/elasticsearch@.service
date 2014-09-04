@@ -1,0 +1,30 @@
+[Unit]
+Description=Elasticsearch Service
+After=docker.service
+Requires=docker.service
+Wants=elasticsearch-discovery@%i.service
+
+[Service]
+TimeoutSec=180
+EnvironmentFile=/etc/environment
+
+ExecStartPre=/usr/bin/mkdir -p /data/elasticsearch
+ExecStart=/bin/bash -c '\
+  UNICAST_HOSTS=$(etcdctl ls /rax_elk/es_hosts | xargs -n1 etcdctl get \
+                  | paste -s -d","); \
+  /usr/bin/docker run \
+    --name %p-%i \
+    --publish ${COREOS_PRIVATE_IPV4}:9200:9200 \
+    --publish ${COREOS_PRIVATE_IPV4}:9300:9300 \
+    --volume /data/elasticsearch:/var/lib/elasticsearch \
+    --cap-add=SYS_RESOURCE \
+    -e ES_PUBLISH_HOST=${COREOS_PRIVATE_IPV4} \
+    -e ES_NODE_NAME=%H \
+    elasticsearch \
+    -Des.discovery.zen.ping.unicast.hosts=$UNICAST_HOSTS'
+
+ExecStop=/usr/bin/docker stop %p-%i
+ExecStop=/usr/bin/docker rm %p-%i
+
+[X-Fleet]
+X-Conflicts=elasticsearch@*.service

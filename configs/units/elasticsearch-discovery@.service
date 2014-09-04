@@ -1,0 +1,24 @@
+[Unit]
+Description=Elasticsearch Discovery Service
+BindsTo=elasticsearch@%i.service
+After=elasticsearch@%i.service
+
+[Service]
+EnvironmentFile=/etc/environment
+ExecStart=/bin/bash -c '\
+  while true; do \
+    echo "Sleeping for 45 seconds"; \
+    sleep 45; \
+    curl -f ${COREOS_PRIVATE_IPV4}:9200; \
+    if [ "$?" = "0" ]; then \
+      etcdctl set /rax_elk/es_hosts/%H ${COREOS_PRIVATE_IPV4} --ttl 60; \
+      echo "Heartbeat for %H at ${COREOS_PRIVATE_IPV4}"; \
+    else \
+      etcdctl rm /rax_elk/es_hosts/%H; \
+      echo "Removed %H from etcd"; \
+    fi; \
+  done'
+ExecStop=/usr/bin/etcdctl rm /rax_elk/es_hosts/%H
+
+[X-Fleet]
+X-ConditionMachineOf=elasticsearch@%i.service
